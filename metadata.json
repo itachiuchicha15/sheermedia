@@ -1,0 +1,8 @@
+{
+  "name": "Sheermedia - Growth & AI Solutions",
+  "description": "A high-end, modern agency website for Sheermedia, showcasing AI-powered growth, marketing, and digital solutions with a sleek professional aesthetic.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
