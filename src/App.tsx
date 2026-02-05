@@ -14,6 +14,7 @@ import { ContactSection } from './components/ContactSection/index';
 import { Footer } from './components/Footer/index';
 import { ContactModal } from './components/ContactModal/index';
 import { AIChatWidget } from './components/Chat/index';
+import { CustomCursor } from './components/UI/CustomCursor';
 
 // Service Pages
 import { AIGrowthPage } from './components/ServiceDetail/AIGrowth';
@@ -24,13 +25,99 @@ import { VideoMarketingPage } from './components/ServiceDetail/VideoMarketing';
 import { AIAutomationPage } from './components/ServiceDetail/AIAutomation';
 import { DigitalMediaPage } from './components/ServiceDetail/DigitalMedia';
 import { WebDevPage } from './components/ServiceDetail/WebDev';
+import { AdminLogin } from './components/Admin/Login';
+import { AdminDashboard } from './components/Admin/Dashboard';
+import { supabase } from './lib/supabase';
 
-import { FINAL_CTA } from './constants/index';
+import { FINAL_CTA, SERVICES_SECTION } from './constants/index';
 
 const App: React.FC = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'service'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'service' | 'admin'>('home');
   const [selectedServiceSlug, setSelectedServiceSlug] = useState<string | null>(null);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Basic routing logic
+    if (window.location.pathname === '/admin') {
+      setCurrentView('admin');
+    }
+
+    // Check for session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (currentView === 'admin') {
+      document.body.classList.add('admin-mode');
+    } else {
+      document.body.classList.remove('admin-mode');
+    }
+  }, [currentView]);
+
+  useEffect(() => {
+    const defaultDesc = "Sheermedia provides fully managed growth, marketing, and digital services using AI-driven intelligence.";
+    const metaDesc = document.querySelector('meta[name="description"]');
+
+    if (currentView === 'home') {
+      document.title = 'Sheermedia | AI-Powered Growth & Digital Solutions';
+      if (metaDesc) metaDesc.setAttribute('content', defaultDesc);
+
+      // Home Schema
+      updateSchema({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sheermedia",
+        "url": "https://sheermedia.net/",
+        "logo": "https://sheermedia.net/logo/favicon.svg",
+        "description": defaultDesc,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "46B, Kothari Road, Nungambakkam",
+          "addressLocality": "Chennai",
+          "postalCode": "600 034",
+          "addressCountry": "IN"
+        }
+      });
+    } else if (currentView === 'service' && selectedServiceSlug) {
+      const service = SERVICES_SECTION.items.find(s => s.slug === selectedServiceSlug);
+      if (service) {
+        document.title = `${service.title} | Sheermedia`;
+        if (metaDesc) metaDesc.setAttribute('content', service.description);
+
+        // Service Schema
+        updateSchema({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "serviceType": service.title,
+          "provider": {
+            "@type": "Organization",
+            "name": "Sheermedia"
+          },
+          "description": service.description
+        });
+      }
+    }
+  }, [currentView, selectedServiceSlug]);
+
+  const updateSchema = (data: object) => {
+    let script = document.getElementById('json-ld-schema');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'json-ld-schema';
+      script.setAttribute('type', 'application/ld+json');
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(data);
+  };
 
   const toggleContactModal = () => setIsContactModalOpen(!isContactModalOpen);
 
@@ -50,6 +137,7 @@ const App: React.FC = () => {
   const handleGoHome = () => {
     setCurrentView('home');
     setSelectedServiceSlug(null);
+    window.history.pushState({}, '', '/');
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
@@ -67,6 +155,13 @@ const App: React.FC = () => {
       default: return null;
     }
   };
+
+  if (currentView === 'admin') {
+    if (!isAdminLoggedIn) {
+      return <AdminLogin onLogin={() => setIsAdminLoggedIn(true)} />;
+    }
+    return <AdminDashboard onLogout={() => setIsAdminLoggedIn(false)} />;
+  }
 
   return (
     <div className="relative min-h-screen bg-white">
@@ -93,11 +188,19 @@ const App: React.FC = () => {
             >
               <Hero onContactClick={toggleContactModal} />
               <LogoMarquee />
-              <IdentityGrid />
+              <div id="execution">
+                <IdentityGrid />
+              </div>
 
-              <Services onServiceClick={handleNavigateToService} />
-              <ProductFeatures onContactClick={toggleContactModal} />
-              <Benefits />
+              <div id="services">
+                <Services onServiceClick={handleNavigateToService} />
+              </div>
+              <div id="products">
+                <ProductFeatures onContactClick={toggleContactModal} />
+              </div>
+              <div id="benefits">
+                <Benefits />
+              </div>
 
               <ContactSection />
 
@@ -192,7 +295,7 @@ const App: React.FC = () => {
                           whileHover={{ scale: 1.02, y: -8 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={toggleContactModal}
-                          className="group relative px-24 py-10 bg-slate-950 text-white rounded-[2rem] text-[12px] font-black uppercase tracking-[0.6em] transition-all overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] hover:shadow-violet-600/20 active:scale-95"
+                          className="group relative px-24 py-10 bg-slate-950 text-white rounded-[2rem] text-[12px] font-black uppercase tracking-[0.6em] transition-[background-color,transform,box-shadow] duration-500 overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] hover:shadow-violet-600/20 active:scale-95"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                           <span className="relative z-10">{FINAL_CTA.button}</span>
@@ -223,10 +326,11 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
-      <AIChatWidget />
+      {/* <AIChatWidget /> - Deactivated per user request */}
       <AnimatePresence mode="wait">
         {isContactModalOpen && <ContactModal onClose={toggleContactModal} />}
       </AnimatePresence>
+      <CustomCursor />
     </div>
   );
 };

@@ -21,14 +21,14 @@ export const AIChatWidget: React.FC = () => {
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
-    
+
     const userMsg = input.trim();
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [
@@ -55,7 +55,7 @@ export const AIChatWidget: React.FC = () => {
     <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[200] flex flex-col items-end pointer-events-none">
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -70,25 +70,24 @@ export const AIChatWidget: React.FC = () => {
                   <div className="text-[7px] uppercase tracking-[0.3em] text-violet-400 font-black leading-none">{CHAT_CONTENT.badge}</div>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)} 
+              <button
+                onClick={() => setIsOpen(false)}
                 className="text-white/20 hover:text-white transition-colors p-1"
                 aria-label="Close chat"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
-            
+
             {/* Messages Area - Refined spacing */}
             <div ref={scrollRef} className="flex-grow p-5 space-y-4 overflow-y-auto bg-slate-50/30 scroll-smooth">
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div 
-                    className={`max-w-[88%] px-4 py-3 rounded-[1.2rem] text-[13px] font-medium leading-[1.5] shadow-sm ${
-                      msg.role === 'user' 
-                        ? 'bg-violet-600 text-white rounded-br-none' 
+                  <div
+                    className={`max-w-[88%] px-4 py-3 rounded-[1.2rem] text-[13px] font-medium leading-[1.5] shadow-sm ${msg.role === 'user'
+                        ? 'bg-violet-600 text-white rounded-br-none'
                         : 'bg-white text-slate-800 rounded-bl-none border border-slate-100'
-                    }`}
+                      }`}
                   >
                     {msg.content}
                   </div>
@@ -104,24 +103,23 @@ export const AIChatWidget: React.FC = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Input Area - More compact */}
             <div className="p-4 bg-white border-t border-slate-100 flex items-center space-x-2 shrink-0">
-              <input 
-                value={input} 
-                onChange={(e) => setInput(e.target.value)} 
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder={CHAT_CONTENT.placeholder} 
+                placeholder={CHAT_CONTENT.placeholder}
                 className="flex-grow bg-slate-100 border-none rounded-xl px-4 py-3 text-[13px] font-medium outline-none focus:ring-2 focus:ring-violet-600/10 focus:bg-white transition-all"
               />
-              <button 
-                onClick={handleSend} 
+              <button
+                onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className={`p-3 rounded-xl transition-all shadow-md flex items-center justify-center shrink-0 ${
-                  input.trim() && !isLoading 
-                    ? 'bg-slate-950 text-white hover:bg-violet-600 active:scale-95' 
+                className={`p-3 rounded-xl transition-all shadow-md flex items-center justify-center shrink-0 ${input.trim() && !isLoading
+                    ? 'bg-slate-950 text-white hover:bg-violet-600 active:scale-95'
                     : 'bg-slate-100 text-slate-300'
-                }`}
+                  }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -132,7 +130,7 @@ export const AIChatWidget: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <motion.button 
+      <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}

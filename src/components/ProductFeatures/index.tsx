@@ -45,11 +45,12 @@ const FeatureSection: React.FC<FeatureProps> = ({ badge, title, subtitle, points
               viewport={{ once: true }}
               transition={{ duration: 1.2, ease: "easeOut" }}
               src={image}
-              alt={title}
-              className="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-1000"
+              alt={`Feature detail: ${title}`}
+              loading="lazy"
+              className="w-full h-full object-cover transition-opacity duration-1000"
               onError={(e) => {
                 // Fallback to a solid color or a very reliable placeholder if needed
-                (e.target as HTMLImageElement).src = '/images/1557200134.jpg';
+                (e.target as HTMLImageElement).src = '/images/1557200134.webp';
               }}
             />
           </div>

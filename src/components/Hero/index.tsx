@@ -12,22 +12,22 @@ export const Hero: React.FC<HeroProps> = ({ onContactClick }) => {
   return (
     <section className="relative min-h-screen grid-bg flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden">
       <div className="container-custom text-center relative z-10">
-        
+
         {/* World-Class Frosted Glass Badge - High Visibility Revision */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="mb-14 inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-slate-50/90 backdrop-blur-2xl border border-slate-300 shadow-[0_4px_12px_rgba(0,0,0,0.05),inset_0_1px_1px_rgba(255,255,255,0.8)] relative overflow-hidden group"
         >
           {/* Subtle Shimmer Effect */}
-          <motion.div 
-            animate={{ 
-              x: ['-100%', '200%'] 
+          <motion.div
+            animate={{
+              x: ['-100%', '200%']
             }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity, 
+            transition={{
+              duration: 4,
+              repeat: Infinity,
               ease: "linear",
               repeatDelay: 2
             }}
@@ -46,19 +46,20 @@ export const Hero: React.FC<HeroProps> = ({ onContactClick }) => {
         </motion.div>
 
         {HERO_CONTENT.headlines.map((text, i) => (
-          <MinimalText 
+          <MinimalText
             key={i}
             delay={i * 0.1}
-            text={text} 
+            text={text}
+            as={i === 0 ? 'h1' : 'h2'}
             className="text-[clamp(3.5rem,8.5vw,9rem)] font-black text-slate-950 tight-heading mb-4 tracking-tighter"
           />
         ))}
 
         <div className="text-[clamp(3.5rem,8.5vw,9rem)] font-black text-slate-950 tight-heading mb-16 tracking-tighter">
-           <span className="text-violet-600">{HERO_CONTENT.highlight}</span>
+          <span className="text-violet-600">{HERO_CONTENT.highlight}</span>
         </div>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -67,17 +68,17 @@ export const Hero: React.FC<HeroProps> = ({ onContactClick }) => {
         >
           {HERO_CONTENT.description}
         </motion.p>
-        
+
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="flex flex-col sm:flex-row justify-center gap-6">
-          <button 
+          <button
             onClick={onContactClick}
-            className="px-12 py-6 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-violet-600 transition-all shadow-xl active:scale-95"
+            className="px-12 py-6 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:bg-violet-600 transition-[background-color,transform,box-shadow] shadow-xl active:scale-95"
           >
             {HERO_CONTENT.primaryCTA}
           </button>
-          <button 
+          <button
             onClick={onContactClick}
-            className="px-12 py-6 bg-white text-slate-950 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:border-violet-600 transition-all active:scale-95"
+            className="px-12 py-6 bg-white text-slate-950 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] hover:border-violet-600 transition-[border-color,transform,box-shadow] active:scale-95"
           >
             {HERO_CONTENT.secondaryCTA}
           </button>

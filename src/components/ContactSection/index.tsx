@@ -2,23 +2,41 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SECURE_LINES, ENCRYPTED_MAIL, CONTACT_SECTION_CONTENT } from '../../constants';
+import { supabase } from '../../lib/supabase';
 
 export const ContactSection: React.FC = () => {
   const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
   const { badge, title, highlight, emailLabel, whatsappLabel, form } = CONTACT_SECTION_CONTENT;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState('submitting');
-    setTimeout(() => {
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      full_name: formData.get('full_name'),
+      email: formData.get('email'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([data]);
+
+      if (error) throw error;
       setFormState('success');
-    }, 1800);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Failed to send message. Please try again.');
+      setFormState('idle');
+    }
   };
 
   return (
     <section id="contact-section" className="py-40 bg-white relative overflow-hidden">
       <div className="container-custom">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -27,13 +45,13 @@ export const ContactSection: React.FC = () => {
         >
           {/* World-Class Ambient Backgrounds */}
           <div className="absolute top-0 right-0 w-full h-full pointer-events-none">
-            <motion.div 
-              animate={{ 
+            <motion.div
+              animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.1, 0.2, 0.1]
               }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-[20%] -right-[10%] w-[80%] h-[80%] bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.15)_0%,transparent_70%)] blur-[100px]" 
+              className="absolute -top-[20%] -right-[10%] w-[80%] h-[80%] bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.15)_0%,transparent_70%)] blur-[100px]"
             />
             <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
           </div>
@@ -42,7 +60,7 @@ export const ContactSection: React.FC = () => {
             {/* Content Side */}
             <div className="w-full lg:w-[45%] p-14 md:p-20 flex flex-col justify-between">
               <div>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
@@ -51,18 +69,18 @@ export const ContactSection: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
                   <span className="text-[11px] font-black text-violet-400 uppercase tracking-[0.8em]">{badge}</span>
                 </motion.div>
-                
+
                 <h2 className="text-6xl md:text-[6.5rem] font-black text-white tracking-tighter leading-[0.82] mb-16">
                   {title} <br />
                   <span className="text-violet-500 drop-shadow-[0_0_20px_rgba(139,92,246,0.2)]">{highlight}</span>
                 </h2>
-                
+
                 <div className="space-y-8">
-                  <motion.div 
+                  <motion.div
                     whileHover={{ x: 10 }}
                     className="flex items-center gap-8 group cursor-pointer"
                   >
-                    <div className="w-16 h-16 rounded-[1.5rem] bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-violet-400 group-hover:bg-violet-600 group-hover:text-white transition-all duration-500 shadow-xl">
+                    <div className="w-16 h-16 rounded-[1.5rem] bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-violet-400 group-hover:bg-violet-600 group-hover:text-white transition-[background-color,color] duration-500 shadow-xl">
                       <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
                     <div>
@@ -73,16 +91,16 @@ export const ContactSection: React.FC = () => {
 
                   <div className="flex flex-col gap-6">
                     {SECURE_LINES.map((num, i) => (
-                      <motion.div 
+                      <motion.div
                         key={i}
                         whileHover={{ x: 10 }}
                         className="flex items-center gap-8 group cursor-pointer"
                       >
-                        <div className="w-16 h-16 rounded-[1.5rem] bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500 shadow-xl">
-                          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                        <div className="w-16 h-16 rounded-[1.5rem] bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-violet-400 group-hover:bg-violet-600 group-hover:text-white transition-[background-color,color] duration-500 shadow-xl">
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                         </div>
                         <div>
-                          <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Office Line 0{i+1}</div>
+                          <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Office Line 0{i + 1}</div>
                           <div className="text-xl font-bold text-white tracking-tight">{num}</div>
                         </div>
                       </motion.div>
@@ -95,10 +113,10 @@ export const ContactSection: React.FC = () => {
             {/* Form Side */}
             <div className="w-full lg:w-[55%] p-14 md:p-20 bg-white/[0.01] border-l border-white/[0.05] relative overflow-hidden">
               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(124,58,237,0.05)_0%,transparent_50%)]" />
-              
+
               <AnimatePresence mode="wait">
                 {formState === 'success' ? (
-                  <motion.div 
+                  <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -111,9 +129,9 @@ export const ContactSection: React.FC = () => {
                     <p className="text-slate-500 text-xl font-medium">Our growth advisor will contact you within 24 hours.</p>
                   </motion.div>
                 ) : (
-                  <motion.form 
-                    key="form" 
-                    onSubmit={handleSubmit} 
+                  <motion.form
+                    key="form"
+                    onSubmit={handleSubmit}
                     className="space-y-12 relative z-10"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -121,43 +139,45 @@ export const ContactSection: React.FC = () => {
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                       <div className="space-y-4 group">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">Identification</label>
-                        <input 
-                          required 
-                          type="text" 
-                          placeholder={form.placeholders.name} 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-3xl px-10 py-6 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-all placeholder:text-slate-700" 
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">{form.labels.name}</label>
+                        <input
+                          required
+                          name="full_name"
+                          type="text"
+                          placeholder={form.placeholders.name}
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-3xl px-10 py-6 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-[background-color,border-color,box-shadow] duration-300 placeholder:text-slate-700"
                         />
                       </div>
                       <div className="space-y-4 group">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">Digital Endpoint</label>
-                        <input 
-                          required 
-                          type="email" 
-                          placeholder={form.placeholders.email} 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-3xl px-10 py-6 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-all placeholder:text-slate-700" 
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">{form.labels.email}</label>
+                        <input
+                          required
+                          name="email"
+                          type="email"
+                          placeholder={form.placeholders.email}
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-3xl px-10 py-6 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-[background-color,border-color,box-shadow] duration-300 placeholder:text-slate-700"
                         />
                       </div>
                     </div>
                     <div className="space-y-4 group">
-                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">Growth Brief</label>
-                      <textarea 
-                        required 
-                        rows={5} 
-                        placeholder={form.placeholders.message} 
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] px-10 py-8 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-all resize-none placeholder:text-slate-700"
+                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-4 group-focus-within:text-violet-400 transition-colors">{form.labels.message}</label>
+                      <textarea
+                        required
+                        name="message"
+                        rows={5}
+                        placeholder={form.placeholders.message}
+                        className="w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] px-10 py-8 text-white font-bold outline-none focus:ring-4 focus:ring-violet-600/10 focus:border-violet-500/50 focus:bg-white/[0.06] transition-[background-color,border-color,box-shadow] duration-300 resize-none placeholder:text-slate-700"
                       ></textarea>
                     </div>
 
                     <div className="relative group/btn">
-                      <button 
+                      <button
                         disabled={formState === 'submitting'}
-                        type="submit" 
-                        className={`w-full md:w-auto px-20 py-8 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.6em] transition-all flex items-center justify-center gap-5 relative z-10 overflow-hidden ${
-                          formState === 'submitting' 
-                          ? 'bg-slate-800 text-slate-500' 
+                        type="submit"
+                        className={`w-full md:w-auto px-20 py-8 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.6em] transition-[background-color,transform,box-shadow] duration-500 flex items-center justify-center gap-5 relative z-10 overflow-hidden ${formState === 'submitting'
+                          ? 'bg-slate-800 text-slate-500'
                           : 'bg-violet-600 text-white shadow-[0_30px_60px_-10px_rgba(124,58,237,0.4)] group-hover/btn:shadow-[0_40px_80px_-10px_rgba(124,58,237,0.6)] group-hover/btn:-translate-y-1'
-                        }`}
+                          }`}
                       >
                         {formState === 'submitting' ? (
                           <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />

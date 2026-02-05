@@ -14,34 +14,41 @@ export const Footer: React.FC = () => {
 
       <div className="container-custom relative z-10">
         <div className="grid lg:grid-cols-12 gap-20 pb-24">
-          
+
           <div className="lg:col-span-4 space-y-12">
-             <div className="flex flex-col items-start gap-4">
-                <Logo className="h-16 text-white opacity-90" inverted={true} />
-                <p className="text-slate-500 max-w-sm text-xl font-medium leading-relaxed">
-                  {description}
-                </p>
-             </div>
-             <div className="space-y-4">
-                <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-violet-400">{addressLabel}</h5>
-                <p className="text-slate-400 font-bold leading-relaxed text-sm">
-                  {OFFICE_ADDRESS.recipient}<br />
-                  {OFFICE_ADDRESS.building}<br />
-                  {OFFICE_ADDRESS.street}<br />
-                  {OFFICE_ADDRESS.city}
-                </p>
-             </div>
+            <div className="flex flex-col items-start gap-4">
+              <Logo className="h-16 text-white opacity-90" inverted={true} />
+              <p className="text-slate-500 max-w-sm text-xl font-medium leading-relaxed">
+                {description}
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-violet-400">{addressLabel}</h5>
+              <p className="text-slate-400 font-bold leading-relaxed text-sm">
+                {OFFICE_ADDRESS.recipient}<br />
+                {OFFICE_ADDRESS.building}<br />
+                {OFFICE_ADDRESS.street}<br />
+                {OFFICE_ADDRESS.city}
+              </p>
+            </div>
           </div>
-          
+
           <div className="lg:col-span-3">
             <h5 className="text-[10px] font-black uppercase tracking-[0.5em] text-violet-400 mb-10">{navTitle}</h5>
             <ul className="space-y-6">
               {NAV_LINKS.map((item) => (
                 <li key={item.name}>
-                  <a href={item.href} className="text-slate-400 hover:text-white font-bold text-sm tracking-tight transition-colors flex items-center group">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const el = document.getElementById(item.href);
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="text-slate-400 hover:text-white font-bold text-sm tracking-tight transition-colors flex items-center group"
+                  >
                     <span className="w-0 group-hover:w-4 h-[2px] bg-violet-600 mr-0 group-hover:mr-3 transition-all duration-300"></span>
                     {item.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -55,9 +62,9 @@ export const Footer: React.FC = () => {
                   <div className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-3">{secureLineLabel}</div>
                   <div className="flex flex-col gap-3">
                     {SECURE_LINES.map((num, idx) => (
-                      <a 
-                        key={idx} 
-                        href={`tel:${num.replace(/[^\d+]/g, '')}`} 
+                      <a
+                        key={idx}
+                        href={`tel:${num.replace(/[^\d+]/g, '')}`}
                         className="text-white font-bold text-xl hover:text-violet-400 transition-colors"
                       >
                         {num}

@@ -10,14 +10,14 @@ export const OFFICE_ADDRESS = {
 };
 
 export const NAV_LINKS = [
-  { name: 'Services', href: '#services' },
-  { name: 'Benefits', href: '#benefits' },
-  { name: 'Success Stories', href: '#products' },
+  { name: 'Managed Execution', href: 'execution' },
+  { name: 'Services', href: 'services' },
+  { name: 'Process', href: 'benefits' },
 ];
 
 export const CLIENT_LOGOS = [
-  "TATA", "Quick Heal", "JET India", "Arstech", 
-  "Fonzel", "Control Print", "Elcom", "Goldenage", 
+  "TATA", "Quick Heal", "JET India", "Arstech",
+  "Fonzel", "Control Print", "Elcom", "Goldenage",
   "DNA", "Sunmitra"
 ];
 
@@ -56,6 +56,7 @@ export interface ServiceDetailItem {
   deliverables: string[];
   impacts: { label: string; value: string }[];
   colorScheme?: "violet" | "emerald";
+  technicalModules?: TechnicalModule[];
   challenge?: {
     title: string;
     points: string[];
@@ -65,6 +66,20 @@ export interface ServiceDetailItem {
     stats: { label: string; value: string; desc: string }[];
   };
   industries?: string[];
+  useCases?: string[];
+  howItWorks?: {
+    title: string;
+    steps: { title: string; desc: string }[];
+  };
+  commercials?: {
+    title: string;
+    table: { column1: string; column2: string; column3: string }[];
+    terms: string[];
+  };
+  comparison?: {
+    title: string;
+    items: { label: string; generic: string; sheermedia: string }[];
+  };
   splitSection?: {
     badge: string;
     title: string;
@@ -83,7 +98,6 @@ export interface ServiceDetailItem {
     image: string;
     cta: string;
   };
-  technicalModules?: TechnicalModule[];
 }
 
 export const SERVICES_SECTION = {
@@ -96,7 +110,7 @@ export const SERVICES_SECTION = {
       title: "AI Growth Intelligence",
       subtitle: "MANAGED_PERFORMANCE",
       points: ["Fully Managed", "No Tools to Learn", "No Platform Access Needed", "ROI Focused"],
-      img: "/images/1551288049.jpg",
+      img: "/images/1551288049.webp",
       description: "We use advanced AI systems internally to analyze your website, competitors, and discover high-intent keywords to optimize Google Ads and paid campaigns.",
       fullDescription: "We handle the internal heavy lifting. Our team uses AI to discover demand signals, reduce wasted ad spend, and improve CTR, conversions, and ROI. You don't need to learn any platforms; we manage everything from keyword discovery to transparent ROI reporting.",
       colorScheme: "violet",
@@ -106,7 +120,7 @@ export const SERVICES_SECTION = {
         badge: "Managed Intelligence",
         title: "Internal AI. Real Profit.",
         description: "Stop managing complex ad tools. We use proprietary AI to find the exact demand signals that convert, so you can focus on your business while we handle the execution.",
-        image: "/images/1518186285589.jpg",
+        image: "/images/1518186285589.webp",
         stats: [{ label: "Efficiency Gain", value: "94%" }, { label: "Tool Learning", value: "0%" }]
       },
       gallerySection: {
@@ -114,9 +128,9 @@ export const SERVICES_SECTION = {
         title: "Cold Data. Hot Results.",
         description: "Our systems analyze millions of points of intent to ensure every marketing dollar is spent effectively.",
         images: [
-          "/images/1460925895917.jpg",
-          "/images/1551434678.jpg",
-          "/images/1504384308090.jpg"
+          "/images/1460925895917.webp",
+          "/images/1551434678.webp",
+          "/images/1504384308090.webp"
         ]
       },
       infrastructureSection: {
@@ -131,17 +145,27 @@ export const SERVICES_SECTION = {
       title: "WhatsApp & Mobile",
       subtitle: "CONVERSATIONAL_SCALE",
       points: ["90%+ Open Rates", "Managed Strategy", "Creative Personalization", "Deployment Handled"],
-      img: "/images/1577563906417.jpg",
+      img: "/images/1577563906417.webp",
       description: "We execute hyper-personalized WhatsApp and mobile campaigns that drive massive engagement and conversion, handled entirely by our team.",
       fullDescription: "WhatsApp is the most personal digital space. We build automated, non-intrusive campaigns using the WhatsApp Business API. From campaign strategy and creative production to final deployment and reporting—Sheermedia handles it all.",
       colorScheme: "emerald",
       deliverables: ["Personalized Video & Message Campaigns", "WhatsApp Business API Execution", "CRM & Data-Based Targeting", "Automated Follow-ups & Nurturing", "Real-time Engagement Analytics"],
       impacts: [{ label: "Open Rates", value: "90%+" }, { label: "Engagement", value: "High" }, { label: "Customer Trust", value: "Peak" }],
+      performance: {
+        title: "Product Performance",
+        stats: [
+          { label: "Delivered", value: "2 Crore+", desc: "Messages delivered to date" },
+          { label: "Monthly", value: "10 Lakh+", desc: "Messages delivered monthly" },
+          { label: "Engagement", value: "3%", desc: "Average engagement rate" },
+          { label: "Conversion", value: "12–15%", desc: "Average conversion rate" }
+        ]
+      },
+      industries: ["Retail & D2C", "E-commerce", "Real Estate", "Automobile", "Healthcare", "BFSI", "Education", "Fashion", "Jewellery", "Beauty & Wellness"],
       splitSection: {
         badge: "Mobile Engagement",
         title: "Personal. Scaled.",
         description: "Marketing should feel like a message from a friend. We create intimacy that builds stronger customer relationships and higher conversions.",
-        image: "/images/1512428559087.jpg",
+        image: "/images/1512428559087.webp",
         stats: [{ label: "Open Rate", value: "98%" }, { label: "Conv. Delta", value: "+22%" }]
       },
       gallerySection: {
@@ -149,15 +173,113 @@ export const SERVICES_SECTION = {
         title: "Managed Reach.",
         description: "Engage your customers where they are, when they are ready, with content handled end-to-end by Sheermedia.",
         images: [
-          "/images/1556656793.jpg",
-          "/images/1512941937669.jpg",
-          "/images/1576678927484.jpg"
+          "/images/1556656793.webp",
+          "/images/1512941937669.webp",
+          "/images/1576678927484.webp"
         ]
       },
       infrastructureSection: {
         title: "Global Reach.",
-        image: "/images/1516321318423.jpg",
+        image: "/images/1516321318423.webp",
         cta: "Start Managed Campaigns"
+      }
+    },
+    {
+      slug: "personalized-video",
+      title: "Hyper-Personalized Marketing",
+      subtitle: "HYPER_PERSONALIZATION",
+      points: ["Dynamic Video Generation", "Behavior Driven", "Real-Time Triggers", "Multi-Channel Delivery"],
+      img: "/images/1552664730.webp",
+      description: "Sheermedia designs and executes hyper-personalized marketing campaigns that adapt to each customer’s behavior, purchase history, and interaction.",
+      fullDescription: "Instead of generic blasts, every customer receives tailored creatives, videos, or emails that feel personal, relevant, and timely — delivered at scale.",
+      colorScheme: "violet",
+      deliverables: ["Dynamic Creative Generation", "Personalized Video Embedded Emails", "Behavior-Driven Personalization", "Real-Time Campaign Triggers", "Automated Multi-Channel Delivery"],
+      impacts: [{ label: "Engagement", value: "Higher" }, { label: "Conversions", value: "Higher" }, { label: "Scale", value: "Infinite" }],
+      challenge: {
+        title: "The Challenge Brands Face Today",
+        points: ["Generic Messaging: Same messages across all channels", "Irrelevant Communication: Disconnected from intent", "Low Engagement: Poor click-through from one-size-fits-all"]
+      },
+      performance: {
+        title: "Market Opportunity (WhatsApp)",
+        stats: [
+          { label: "Active Users", value: "2.5B", desc: "Monthly active users worldwide" },
+          { label: "Daily Checks", value: "23x", desc: "Users check WhatsApp per day" },
+          { label: "Open Rates", value: "Elite", desc: "Highest compared to other channels" }
+        ]
+      },
+      useCases: ["End-of-season sales", "Anniversary & special offers", "Product launches", "Abandoned cart recovery", "Feedback & re-engagement", "Special promotions"],
+      howItWorks: {
+        title: "High-Level Flow",
+        steps: [
+          { title: "Step 1: Data Sharing", desc: "Brand shares CRM, CDP, or e-commerce data." },
+          { title: "Step 2: Creative Input", desc: "Brands provide creatives or Sheermedia creates new ones." },
+          { title: "Step 3: Segmentation", desc: "Logic built using purchase behavior and browsing patterns." },
+          { title: "Step 4: Generation", desc: "Dynamic text overlays and personalized video frames." },
+          { title: "Step 5: Delivery", desc: "Delivered across Email, WhatsApp, and Push." }
+        ]
+      },
+      commercials: {
+        title: "Monthly Messaging Plans",
+        table: [
+          { column1: "50,000 – 1,00,000", column2: "2.45", column3: "1,22,500" },
+          { column1: "1,00,000 – 3,00,000", column2: "1.95", column3: "1,95,000" },
+          { column1: "Above 3,00,000", column2: "1.65", column3: "4,95,000" }
+        ],
+        terms: [
+          "Bundles must be fully consumed within one (1) month",
+          "WhatsApp delivery/platform fees billed separately",
+          "All campaigns use brand's own WhatsApp Business Account",
+          "CRM data shared via CSV or APIs",
+          "Advance payment of 50% required before project start",
+          "Pricing applicable for India and exclusive of GST"
+        ]
+      },
+      comparison: {
+        title: "The Radical Advantage.",
+        items: [
+          { label: "Messaging", generic: "Generic Batch-Blasts", sheermedia: "Hyper-Personalized Flows" },
+          { label: "Content", generic: "Static Template Media", sheermedia: "Dynamic AI-Video Generation" },
+          { label: "Trigger", generic: "Time-Based Scheduling", sheermedia: "Real-Time Action Triggers" },
+          { label: "Delivery", generic: "Siloed Email / SMS", sheermedia: "Full Omnichannel Mastery" },
+          { label: "Performance", generic: "Linear Engagement", sheermedia: "Exponential ROI Shift" }
+        ]
+      },
+      technicalModules: [
+        {
+          id: "TM-01",
+          title: "AI Video Engine",
+          headline: "Zero-Latency Render",
+          description: "Our proprietary internal engine generates thousands of unique video frames in real-time based on incoming data signals.",
+          points: ["Variable Overlays", "Lip-Sync Syncing", "Multi-Language Support"],
+          cta: "Audit Engine"
+        },
+        {
+          id: "TM-02",
+          title: "Logic Controller",
+          headline: "Behavioral Mapping",
+          description: "Campaigns adapt on-the-fly. If a customer browses but doesn't buy, the next message autonomously changes tone.",
+          points: ["Intent Recognition", "Flow Autonomy", "Dynamic Pricing"],
+          cta: "View Logic"
+        }
+      ],
+      industries: ["Retail", "D2C", "E-commerce", "Real Estate", "Automobile", "Healthcare", "BFSI", "Education", "Fashion", "Jewellery", "Beauty & Wellness"],
+      splitSection: {
+        badge: "Higher ROI",
+        title: "Behavior Driven.",
+        description: "Sheermedia enables brands to deliver messages that truly resonate with each customer’s unique interests. We turn customers into advocates.",
+        image: "/images/1547658719.webp",
+        stats: [{ label: "Open Rate", value: "98%" }, { label: "Conversion", value: "+40%" }]
+      },
+      gallerySection: {
+        badge: "Creative Intelligence",
+        title: "Dynamic Visuals.",
+        description: "Sheermedia automatically creates personalized images and videos by embedding customer names and relevant products.",
+        images: ["/images/1542744173.webp", "/images/1557804506.webp", "/images/1460925895917.webp"]
+      },
+      infrastructureSection: {
+        title: "Start Scaling Today.",
+        image: "/images/1558494949.jpg",
+        cta: "Deploy Personalization"
       }
     },
     {
@@ -165,7 +287,7 @@ export const SERVICES_SECTION = {
       title: "AI Agents & Automation",
       subtitle: "OPERATIONAL_AUTONOMY",
       points: ["Lead Qualification", "Support Automation", "CRM Sync", "Faster Response"],
-      img: "/images/1531746790731.jpg",
+      img: "/images/1531746790731.webp",
       description: "We deploy AI-powered agents to automate and enhance business workflows, qualifying leads and handling support 24/7.",
       fullDescription: "Outcome-driven automation. Our AI agents handle lead qualification, nurturing, sales follow-ups, and customer support. This reduces operational effort and ensures no lead is left cold, with full integration into your CRM/ERP.",
       colorScheme: "violet",
@@ -175,7 +297,7 @@ export const SERVICES_SECTION = {
         badge: "Autonomous Agents",
         title: "Work Never Sleeps.",
         description: "While your team rests, your AI agents are qualifying prospects and closing the gap on customer support queries.",
-        image: "/images/1516110833967.jpg",
+        image: "/images/1516110833967.webp",
         stats: [{ label: "Lead Qual Time", value: "-90%" }, { label: "Availability", value: "24/7" }]
       },
       gallerySection: {
@@ -183,14 +305,14 @@ export const SERVICES_SECTION = {
         title: "Silent Efficiency.",
         description: "Watch your operational overhead drop as our AI handles high-volume interactions with human-like precision.",
         images: [
-          "/images/1550751827.jpg",
-          "/images/1518186285589.jpg",
-          "/images/1485827404703.jpg"
+          "/images/1550751827.webp",
+          "/images/1518186285589.webp",
+          "/images/1485827404703.webp"
         ]
       },
       infrastructureSection: {
         title: "Smarter Workflows.",
-        image: "/images/1550751827.jpg",
+        image: "/images/1550751827.webp",
         cta: "Deploy AI Agents"
       }
     },
@@ -199,7 +321,7 @@ export const SERVICES_SECTION = {
       title: "Demand & Expansion",
       subtitle: "STRATEGIC_INTELLIGENCE",
       points: ["Demand Validation", "Customer Profiling", "Competitor Analysis", "Actionable Reports"],
-      img: "/images/1460925895917.jpg",
+      img: "/images/1460925895917.webp",
       description: "Make smarter decisions using AI-backed market intelligence to validate product demand and identify customer segments.",
       fullDescription: "We deliver actionable reports, not raw data. Our market intelligence helps you validate service demand, analyze competitors and pricing, and discover new market expansion opportunities with absolute clarity.",
       colorScheme: "emerald",
@@ -209,7 +331,7 @@ export const SERVICES_SECTION = {
         badge: "Anthropological Data",
         title: "The Human Pulse.",
         description: "Data is useless without context. We combine cold analytics with warm sentiment study to find exactly where your audience is underserved.",
-        image: "/images/1552664730.jpg",
+        image: "/images/1552664730.webp",
         stats: [{ label: "Sentiment Accuracy", value: "97%" }, { label: "Market Validation", value: "Peak" }]
       },
       gallerySection: {
@@ -217,14 +339,14 @@ export const SERVICES_SECTION = {
         title: "Deep Context.",
         description: "We dive beneath surface level metrics to understand the 'Why' behind every market trend.",
         images: [
-          "/images/1522202176988.jpg",
+          "/images/1522202176988.webp",
           "/images/1454165833767.jpg",
-          "/images/1551288049.jpg"
+          "/images/1551288049.webp"
         ]
       },
       infrastructureSection: {
         title: "Global Intelligence.",
-        image: "/images/1451187580459.jpg",
+        image: "/images/1451187580459.webp",
         cta: "Scan Your Market"
       }
     },
@@ -233,7 +355,7 @@ export const SERVICES_SECTION = {
       title: "Digital Media Marketing",
       subtitle: "PERFORMANCE_ENGINEERING",
       points: ["Google Ads", "Social Media", "Content Strategy", "Performance Focused"],
-      img: "/images/1557804506.jpg",
+      img: "/images/1557804506.webp",
       description: "Complete digital marketing execution under one roof. We focus on traffic, leads, and sales with full performance tracking.",
       fullDescription: "Our goal is Traffic → Leads → Sales. We manage your Google Ads, Meta/LinkedIn social media marketing, and content strategy with high-performance execution and optimization.",
       colorScheme: "violet",
@@ -243,7 +365,7 @@ export const SERVICES_SECTION = {
         badge: "Growth Loops",
         title: "Compound Result.",
         description: "Performance isn't about a single win; it's about building a system where every dollar spent earns the next three.",
-        image: "/images/1551434678.jpg",
+        image: "/images/1551434678.webp",
         stats: [{ label: "Average ROAS", value: "5.4x" }, { label: "Conversion Lift", value: "3.4x" }]
       },
       gallerySection: {
@@ -251,14 +373,14 @@ export const SERVICES_SECTION = {
         title: "Vibrant Impact.",
         description: "We test thousands of variables to find the one that resonates with your true audience.",
         images: [
-          "/images/1542744173.jpg",
-          "/images/1557804506.jpg",
-          "/images/1460925895917.jpg"
+          "/images/1542744173.webp",
+          "/images/1557804506.webp",
+          "/images/1460925895917.webp"
         ]
       },
       infrastructureSection: {
         title: "Scaling Command.",
-        image: "/images/1531297484001.jpg",
+        image: "/images/1531297484001.webp",
         cta: "Scale Your Brand"
       }
     },
@@ -267,7 +389,7 @@ export const SERVICES_SECTION = {
       title: "Web Design & Dev",
       subtitle: "CONVERSION_ARCHITECTURE",
       points: ["High-speed Pages", "Conversion First", "SEO Ready", "Mobile First"],
-      img: "/images/1581291518633.jpg",
+      img: "/images/1581291518633.webp",
       description: "We design and build high-performing, fast-loading websites that convert visitors into leads for startups and SMEs.",
       fullDescription: "Your website is your hardest working salesperson. We build SEO-ready, mobile-first, conversion-focused UI integrated with modern marketing and analytics tools.",
       colorScheme: "emerald",
@@ -277,7 +399,7 @@ export const SERVICES_SECTION = {
         badge: "Pixel Precision",
         title: "Conversion First.",
         description: "Your website is your best salesperson. We make sure it's fast, convincing, and always open for business.",
-        image: "/images/1547658719.jpg",
+        image: "/images/1547658719.webp",
         stats: [{ label: "Perf Score", value: "100/100" }, { label: "Conv Rate", value: "6.2%" }]
       },
       gallerySection: {
@@ -285,14 +407,14 @@ export const SERVICES_SECTION = {
         title: "Aesthetically Fast.",
         description: "Beauty meeting performance. We use serverless technology for infinite scalability.",
         images: [
-          "/images/1507238691740.jpg",
-          "/images/1581291518633.jpg",
-          "/images/1517694712202.jpg"
+          "/images/1507238691740.webp",
+          "/images/1581291518633.webp",
+          "/images/1517694712202.webp"
         ]
       },
       infrastructureSection: {
         title: "Infinite Presence.",
-        image: "/images/1551434678.jpg",
+        image: "/images/1551434678.webp",
         cta: "Build My Site"
       }
     }
@@ -309,7 +431,7 @@ export const PRODUCT_FEATURES_DATA = [
       "High-value Keyword discovery",
       "Managed ROI reporting"
     ],
-    image: "/images/1551434678.jpg"
+    image: "/images/1551434678.webp"
   },
   {
     badge: "Human Connection",
@@ -321,7 +443,7 @@ export const PRODUCT_FEATURES_DATA = [
       "Creative & Personalization",
       "Managed Deployment & Reporting"
     ],
-    image: "/images/1512941937669.jpg"
+    image: "/images/1512941937669.webp"
   }
 ];
 
@@ -330,32 +452,32 @@ export const BENEFITS_SECTION = {
   title: "How It",
   highlight: "Works.",
   steps: [
-    { 
-      title: "Understand Your Business", 
+    {
+      title: "Understand Your Business",
       id: "PHASE_01",
       desc: "We analyze your goals, audience, competitors, and specific challenges.",
       kpi: "Clarity",
       deliverable: "Audit Report",
       meta: "14-Day Cycle"
     },
-    { 
-      title: "Strategy & Setup", 
+    {
+      title: "Strategy & Setup",
       id: "PHASE_02",
       desc: "Custom growth + digital execution plan tailored for your brand.",
       kpi: "Expected ROI",
       deliverable: "Strategic Plan",
       meta: "Ready to Go"
     },
-    { 
-      title: "Execution & Automation", 
+    {
+      title: "Execution & Automation",
       id: "PHASE_03",
       desc: "AI-driven marketing, engagement, and operational optimization.",
       kpi: "Leads",
       deliverable: "Managed Output",
       meta: "Now Active"
     },
-    { 
-      title: "Reporting & Scaling", 
+    {
+      title: "Reporting & Scaling",
       id: "PHASE_04",
       desc: "Insights, ROI tracking, and continuous data-driven improvement.",
       kpi: "Growth",
@@ -368,8 +490,8 @@ export const BENEFITS_SECTION = {
     title: "The",
     highlight: "Sheer Advantage.",
     stats: [
-      { label: "Experience", value: "12+" },
-      { label: "Success Stories", value: "130+" }
+      { label: "Experience", value: "12" },
+      { label: "Success Stories", value: "130" }
     ],
     reasons: [
       { t: "One Outsourced Partner", d: "A single, expert point of contact for growth + digital execution, eliminating the need for multiple agencies." },
@@ -394,9 +516,9 @@ export const CONTACT_SECTION_CONTENT = {
       message: "How can we help?"
     },
     placeholders: {
-      name: "Jane Smith",
-      email: "jane@company.com",
-      message: "Tell us about your business goals..."
+      name: "Enter your name",
+      email: "Enter your email address",
+      message: "How can we help you reach your goals?"
     },
     submit: "Get Started",
     success: "Thank you! Our growth specialist will contact you shortly."
@@ -407,10 +529,15 @@ export const MODAL_CONTENT = {
   title: "Ready to",
   highlight: "Scale?",
   form: {
-    placeholders: {
+    labels: {
       name: "Full Name",
       email: "Email Address",
-      message: "How can we help you grow?"
+      message: "Your Message"
+    },
+    placeholders: {
+      name: "Enter your full name",
+      email: "Enter your email address",
+      message: "Tell us about your project or inquiry..."
     },
     submit: "GET STARTED",
     success: "Success! We've received your request.",
@@ -453,26 +580,26 @@ export const FINAL_CTA = {
 
 export const IDENTITY_CARDS = [
   {
-    id: "01", 
-    title: "AI Growth Intel", 
+    id: "01",
+    title: "AI Growth Intel",
     description: "Internal AI that finds demand signals and optimizes spend without client complexity.",
     iconType: "ai"
   },
   {
-    id: "02", 
-    title: "WhatsApp Scale", 
+    id: "02",
+    title: "WhatsApp Scale",
     description: "Managed hyper-personalized outreach with 90%+ open rates and API execution.",
     iconType: "whatsapp"
   },
   {
-    id: "03", 
-    title: "Managed Ads", 
+    id: "03",
+    title: "Managed Ads",
     description: "Full campaign execution focused on ROI. No tools for you to learn or manage.",
     iconType: "ads"
   },
   {
-    id: "04", 
-    title: "Web Performance", 
+    id: "04",
+    title: "Web Performance",
     description: "High-conversion, fast-loading websites designed to turn visitors into business results.",
     iconType: "web"
   }
